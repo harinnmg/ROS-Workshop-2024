@@ -61,7 +61,12 @@ Now we can use a launch file from a package to open turtlesim and motion code si
  </launch>
  
  ```
- 
+# ROS Service
+```
+rosservice list
+```
+# ROS bags
+
 # Drawing controlled shapes
 
 ```
