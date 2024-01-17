@@ -3,7 +3,7 @@
 
 # CPP for ROS
 
-# Hello world program in CPP
+## Hello world program in CPP
 1. Create a folder 'mycpp'
 2. gedit hello.cpp
 3. Type the following and save
@@ -27,7 +27,7 @@ Giving a name to executable
 g++ hello.cpp -o hello
 ./hello
 ```
-#Executing cpp using cmake
+### Executing cpp using cmake
 
 In the same folder 'mycpp' create a file called 'CMakeLists.txt' and add following
 
@@ -51,7 +51,6 @@ after compilation, run
 ```
 ./hello
 ```
-
 
 
 # ROS File System
