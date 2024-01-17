@@ -1,7 +1,18 @@
+# tf
+TF, or the Transform Library, is a key component of ROS that manages the coordinate frame transformations in a robot system. It enables the tracking of the relationship between different frames attached to various components of a robot, such as sensors, actuators, and the robot itself. These transformations are essential for tasks like sensor fusion, localization, and motion planning.
 
+Key concepts related to TF in ROS include:
+
+Frames: In a robot system, frames represent coordinate systems associated with different components. For example, you might have frames for a robot's base, a camera, or an end effector.
+
+Transforms: Transforms describe the translation and rotation between frames. TF keeps track of these transforms over time, allowing for dynamic changes in the robot's configuration.
+
+Broadcaster and Listener: The TF library includes components for broadcasting transforms (TF broadcasters) and listening for transforms (TF listeners). Broadcasters update the transforms, while listeners can request the current transformation between specific frames.
+
+Tree Structure: The relationships between frames often form a tree structure, reflecting the hierarchy of components in the robot system. This tree structure is crucial for efficiently computing and managing transforms.
 The broadcaster code (ref: wiki.ros.org)
 ```
-Toggle line numbers
+
 #!/usr/bin/env python  
 import roslib
 roslib.load_manifest('learning_tf')
