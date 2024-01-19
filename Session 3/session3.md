@@ -81,6 +81,7 @@ if __name__ == '__main__':
  Create a launch file and start a node
  
  ```
+<?xml version="1.0" encoding="UTF-8"?>
   <launch>
     <!-- Turtlesim Node-->
     <node pkg="turtlesim" type="turtlesim_node" name="sim"/>
