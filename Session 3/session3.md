@@ -90,10 +90,10 @@ if __name__ == '__main__':
       <param name="turtle" type="string" value="turtle1" />
       <param name="turtle" type="string" value="turtle2" /> 
     </node>
-   <node pkg="<package name>"" type="listener.py" 
+   <node pkg="<package name>" type="listener.py" 
           name="listener" />
     </node>
-
+ </launch>
 
 ```
 # RVIZ
