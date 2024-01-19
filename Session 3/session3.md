@@ -12,8 +12,7 @@ Broadcaster and Listener: The TF library includes components for broadcasting tr
 Tree Structure: The relationships between frames often form a tree structure, reflecting the hierarchy of components in the robot system. This tree structure is crucial for efficiently computing and managing transforms.
 The broadcaster code (ref: wiki.ros.org)
 ```
-
-#!/usr/bin/env python3  
+#!/usr/bin/env python3
 import roslib
 import rospy
 
@@ -43,7 +42,6 @@ The listner code
 ```
 #!/usr/bin/env python3  
 import roslib
-
 import rospy
 import math
 import tf
@@ -57,7 +55,7 @@ if __name__ == '__main__':
 
     rospy.wait_for_service('spawn')
     spawner = rospy.ServiceProxy('spawn', turtlesim.srv.Spawn)
-    spawner(4, 2, 0, 'turtle2')
+    spawner(5, 5, 0, 'turtle2')
 
     turtle_vel = rospy.Publisher('turtle2/cmd_vel', geometry_msgs.msg.Twist,queue_size=1)
 
@@ -68,8 +66,8 @@ if __name__ == '__main__':
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             continue
 
-        angular = 4 * math.atan2(trans[1], trans[0])
-        linear = 0.5 * math.sqrt(trans[0] ** 2 + trans[1] ** 2)
+        angular = 1* math.atan2(trans[1], trans[0])
+        linear = 0.595* math.sqrt(trans[0] ** 2 + trans[1] ** 2)
         cmd = geometry_msgs.msg.Twist()
         cmd.linear.x = linear
         cmd.angular.z = angular
@@ -81,20 +79,23 @@ if __name__ == '__main__':
  Create a launch file and start a node
  
  ```
-<?xml version="1.0" encoding="UTF-8"?>
-  <launch>
-    <!-- Turtlesim Node-->
-    <node pkg="turtlesim" type="turtlesim_node" name="sim"/>
-   <node name="topic_publisher" pkg="<package_name>" type="move.py" />
+<launch>
+   <!-- Turtlesim Node-->
+   <node pkg="turtlesim" type="turtlesim_node" name="sim"/>
 
-    <node name="turtle1_tf_broadcaster" pkg="<package name>" type="broadcaster.py" respawn="false" output="screen" >
-      <param name="turtle" type="string" value="turtle1" />
-      <param name="turtle" type="string" value="turtle2" /> 
-    </node>
-   <node pkg="<package name>" type="listener.py" 
-          name="listener" />
-    </node>
+
+    <node name="turtle1_pgm" pkg="first" type="move.py" respawn="false" output="screen" >
+   </node>
+   <node name="turtle1_tf_broadcaster" pkg="first" type="broad.py" respawn="false" output="screen" >
+     <param name="turtle" type="string" value="turtle1" />
+   </node>
+   <node name="turtle2_tf_broadcaster" pkg="first" type="broad.py" respawn="false" output="screen" >
+     <param name="turtle" type="string" value="turtle2" /> 
+   </node>
+  <node pkg="first" type="list.py" 
+         name="listener" />
  </launch>
+
 
 ```
 # RVIZ
