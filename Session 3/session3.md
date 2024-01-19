@@ -13,9 +13,8 @@ Tree Structure: The relationships between frames often form a tree structure, re
 The broadcaster code (ref: wiki.ros.org)
 ```
 
-#!/usr/bin/env python  
+#!/usr/bin/env python3  
 import roslib
-roslib.load_manifest('learning_tf')
 import rospy
 
 import tf
@@ -42,9 +41,9 @@ if __name__ == '__main__':
 The listner code
 
 ```
-#!/usr/bin/env python  
+#!/usr/bin/env python3  
 import roslib
-roslib.load_manifest('learning_tf')
+
 import rospy
 import math
 import tf
