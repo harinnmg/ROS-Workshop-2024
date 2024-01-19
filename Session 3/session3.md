@@ -89,6 +89,10 @@ if __name__ == '__main__':
 
     <node name="turtle1_tf_broadcaster" pkg="<package name>" type="broadcaster.py" respawn="false" output="screen" >
       <param name="turtle" type="string" value="turtle1" />
+      <param name="turtle" type="string" value="turtle2" /> 
+    </node>
+   <node pkg="<package name>"" type="turtle_tf_listener.py" 
+          name="listener" />
     </node>
 
 
