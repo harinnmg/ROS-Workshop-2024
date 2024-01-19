@@ -85,9 +85,9 @@ if __name__ == '__main__':
   <launch>
     <!-- Turtlesim Node-->
     <node pkg="turtlesim" type="turtlesim_node" name="sim"/>
-    <node pkg="turtlesim" type="turtle_teleop_key" name="teleop" output="screen"/>
+   <node name="topic_publisher" pkg="<package_name>" type="move.py" />
 
-    <node name="turtle1_tf_broadcaster" pkg="<package name>" type="turtle_tf_broadcaster.py" respawn="false" output="screen" >
+    <node name="turtle1_tf_broadcaster" pkg="<package name>" type="broadcaster.py" respawn="false" output="screen" >
       <param name="turtle" type="string" value="turtle1" />
     </node>
 
