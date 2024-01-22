@@ -272,6 +272,44 @@ In CMakeLists.txt, do the following editing
   message_generation # add this line
 )
 ```
+# Custom Service
+In the package create a new folder 'srv' and gedit a file 'hai.srv'
+```
+int32 request_data
+---
+int32 response_data
+```
+Edit CMakeLists.txt with following
+```
+add_service_files(
+  FILES
+  CustomService.srv
+)
+```
+Write the service code as follows
+```
+#!/usr/bin/env python3
+
+import rospy
+from simple.srv import hai
+
+def handle_custom_service(req):
+    rospy.loginfo("Received request with data: %d", req.request_data)
+    # Perform some computation or action based on the request
+    response = req.request_data * 2
+    rospy.loginfo("Sending response with data: %d", response)
+    return response
+
+def custom_service_server():
+    rospy.init_node('custom_service_server')
+    service = rospy.Service('custom_service', hai, handle_custom_service)
+    rospy.loginfo("Custom service server is ready.")
+    rospy.spin()
+
+if __name__ == '__main__':
+    custom_service_server()
+```
+
 
 Also add
 ```
