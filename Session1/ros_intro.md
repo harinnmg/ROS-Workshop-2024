@@ -245,23 +245,21 @@ add_dependencies(listner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_T
 # Custom Message in ROS
 
 ```
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
- import rospy
- from my_package.msg import Point3D
+import rospy
+from simple.msg import hello
 
- rospy.init_node('point_publisher')
- pub = rospy.Publisher('/point', Point3D, queue_size=10)
+rospy.init_node('topic_publisher')
+pub = rospy.Publisher('/abc', hello, queue_size=1)
+rate = rospy.Rate(2)
+move = hello() # defining the way we can allocate the values
+move.x = 1 # allocating the values in x direction - linear
+move.y = 0 # allocating the values in z direction - angular
 
- point = Point3D()
- point.x = 1.0
- point.y = 2.0
- point.z = 3.0
-
- rate = rospy.Rate(10)
- while not rospy.is_shutdown():
-    pub.publish(point)
-    rate.sleep()
+while not rospy.is_shutdown(): 
+  pub.publish(move)
+  rate.sleep()
 ```
 In CMakeLists.txt, do the following editing  
   ```
