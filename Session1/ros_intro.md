@@ -272,6 +272,25 @@ In CMakeLists.txt, do the following editing
   message_generation # add this line
 )
 ```
+
+Also add
+```
+add_message_files(
+  FILES
+  MyCustomMessage.msg # add your message file(s) here
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
+```
+In package.xml, do the following edit
+```
+<build_depend>message_generation</build_depend>
+<exec_depend>message_runtime</exec_depend>
+```
+
 # Custom Service
 In the package create a new folder 'srv' and gedit a file 'hai.srv'
 ```
@@ -310,22 +329,4 @@ if __name__ == '__main__':
     custom_service_server()
 ```
 
-
-Also add
-```
-add_message_files(
-  FILES
-  MyCustomMessage.msg # add your message file(s) here
-)
-
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-)
-```
-In package.xml, do the following edit
-```
-<build_depend>message_generation</build_depend>
-<exec_depend>message_runtime</exec_depend>
-```
 
