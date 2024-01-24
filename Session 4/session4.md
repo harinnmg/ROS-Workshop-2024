@@ -426,28 +426,88 @@ Launch file
 ```
 <?xml version="1.0"?>
 <launch>
-<param name="robot_description" command="cat $(find
-<package_name>)/urdf/<urdf_name>.urdf" />
+<param name="robot_description" command="cat $(find test3)/urdf/test.urdf" />
+<arg name="rvizconfig" default="$(find test3)/rviz/test.rviz" />
 <arg name = "x" default = "0"/>
 <arg name = "y" default = "0"/>
 <arg name = "z" default = "0"/>
+<arg name="gui" default="true" />
 <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" output="screen"
 args="-urdf -param robot_description -model my_first -x $(arg x) -y $(arg y) -z $(arg z)"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
+
     <arg name="use_sim_time" value="true"/>
     <arg name="debug" value="false"/>
     <arg name="gui" value="true" />
     <arg name="world_name" value="true"/>
   </include>
-
+  <node if="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+<node unless="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 </launch>
 ```
 4. Go to workspace and catkin_make
 5. Apply the command ```source devel/setup.bash```
 6. Run the command ```roslaunch <package_name> <launch_code with extension>``` replace  <package_name> with your package name and <launch_code with extension> with your launch file name with .launch extension. You will see the cylinder is spawned in Gazebo.
-7. Adding plugins: follow the link instructions.
-https://classic.gazebosim.org/tutorials?tut=plugins_hello_world&cat=write_plugin
+
+## Adding Joints in Gazebo
+```
+<?xml version="1.0"?>
+<robot name="myfirst">
+<link name="base_link">
+<inertial>
+<mass value="5"/>
+<origin rpy="0 0 0" xyz="0 0 0"/>
+<inertia ixx="0" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0"/>
+</inertial>
+<collision>
+<geometry>
+<cylinder length="0.5" radius="0.5"/>
+</geometry>
+</collision>
+<visual>
+<geometry>
+<cylinder length="0.5" radius="0.5"/>
+</geometry>
+</visual>
+</link>
+<link name="right_leg">
+<inertial>
+<mass value="5"/>
+<origin rpy="0 0 0" xyz="0 0 0"/>
+<inertia ixx="0" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0"/>
+</inertial>
+<collision>
+<geometry>
+<box size="0.6 0.1 0.2"/>
+</geometry>
+</collision>
+    <visual>
+      <geometry>
+       <box size="0.6 0.1 0.2"/>
+      </geometry>
+    </visual>
+  </link>
+   <joint name="base_to_right_leg" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_leg"/>
+     <origin
+      xyz="0 0 0.35"
+      rpy="0 0 0" />
+
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="1"
+      velocity="1" />
+  </joint>
+
+
+</robot>
+```
+
 #  Create a custom world
 
 1. Close all the terminals and open Gazebo
