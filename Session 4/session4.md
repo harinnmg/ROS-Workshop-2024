@@ -612,4 +612,154 @@ args="-urdf -param robot_description -model my_first -x $(arg x) -y $(arg y) -z 
 ```
 5. Do the procedure for roslaunch as we done previously 
 
+# With Control
+```
+<?xml version="1.0"?>
+<robot name="myfirst">
+<link name="base_link">
+<inertial>
+<mass value="5"/>
+<origin rpy="0 0 0" xyz="0 0 0"/>
+<inertia ixx="0" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0"/>
+</inertial>
+<collision>
+<geometry>
+<cylinder length="0.5" radius="0.5"/>
+</geometry>
+</collision>
+<visual>
+<geometry>
+<cylinder length="0.5" radius="0.5"/>
+</geometry>
+</visual>
+</link>
+<link name="right_leg1">
+<inertial>
+<mass value="5"/>
+<origin rpy="0 0 0" xyz="0 0 0"/>
+<inertia ixx="0.5" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.2"/>
+</inertial>
+<collision>
+<geometry>
+<box size="0.6 0.1 0.2"/>
+</geometry>
+</collision>
+    <visual>
+      <geometry>
+       <box size="0.6 0.1 0.2"/>
+      </geometry>
+    </visual>
+  </link>
+   <joint name="base_to_right_leg" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_leg1"/>
+     <origin
+      xyz="0 0 0.45"
+      rpy="0 0 0" />
+
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="1"
+      velocity="1" />
+  </joint>
+
+<link name="camera_link">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+   <joint name="right_leg" type="fixed">
+    <axis xyz="0 0 1" />
+    <origin xyz="0 0 0.55" rpy="0 0 0"/>
+    <parent link="right_leg1"/>
+    <child link="camera_link"/>
+  </joint>
+    <!-- camera -->
+ <gazebo reference="camera_link">
+    <sensor type="camera" name="camera1">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise is sampled independently per pixel on each frame.
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+       <frame_name>camera_link_optical</frame_name>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera1</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <gazebo>
+
+<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+<robotNamespace>/myfirst</robotNamespace>
+<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+</plugin>
+</gazebo> 
+
+   <transmission name="tran1">
+   <type>transmission_interface/SimpleTransmission</type>
+  <joint name="base_to_right_leg">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="Rev1_actr">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+  
+<gazebo>
+    <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+        <robotNamespace>myfirst</robotNamespace>
+        <jointName>base_to_right_leg</jointName>
+        <updateRate>100</updateRate>
+    </plugin>
+  </gazebo> 
+</robot>
+```
 
